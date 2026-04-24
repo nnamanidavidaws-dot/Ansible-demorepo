@@ -20,6 +20,12 @@
       state: absent
       purge: yes
 
+  - name: Remove Docker
+    apt:
+      name: docker.io
+      state: absent
+      purge: yes
+
   - name: Remove leftover dependency packages
     apt:
       autoremove: yes

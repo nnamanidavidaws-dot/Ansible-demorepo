@@ -1,0 +1,12 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+
+  - name: check docker version
+    command: docker --version
+    register: result
+    ignore_errors: yes
+

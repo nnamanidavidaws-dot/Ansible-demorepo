@@ -17,3 +17,8 @@
     apt:
       name: libapache2-mod-php
       state: latest
+
+  - name: install docker 
+    apt:
+      name: docker.io
+      state: latest

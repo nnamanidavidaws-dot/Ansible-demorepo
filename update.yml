@@ -1,0 +1,18 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+
+  - name: Update the repository index
+    apt:
+      update_cache: yes
+
+  - name: Upgrade the packages on the servers
+    apt:
+      upgrade: yes
+
+  - name: Reboot ther servers after upgrade
+    reboot:
+      reboot_timeout: 300
