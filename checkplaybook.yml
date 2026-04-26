@@ -5,8 +5,8 @@
   tasks:
 
 
-  - name: check docker version
-    command: docker --version
+  - name: check packages running
+    command: docker --version && php --version
     register: result
     ignore_errors: yes
 

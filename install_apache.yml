@@ -4,52 +4,25 @@
   become: true
   tasks:
 
-  - name: update repository index
-    apt:
-      update_cache: yes
-    when: ansible_distribution == "Ubuntu"
 
-  - name: Install apache2 package
-    apt:
-      name: apache2
+  - name: Install packages
+    package:
+      name: 
+         - "{{ apache_package }}"
+         - "{{ php_package }}"
+         - "{{ docker_package }}"
       state: latest
-    when: ansible_distribution == "Ubuntu"
+      update_cache: yes 
 
-  - name: add php support for apache
-    apt:
-      name: libapache2-mod-php
-      state: latest
-    when: ansible_distribution == "Ubuntu"
-
-  - name: install docker 
-    apt:
-      name: docker.io
-      state: latest
-    when: ansible_distribution == "Ubuntu"
-
-
-
-
-  - name: update repository index
-    yum:
-      update_cache: yes
-    when: ansible_distribution == "Amazon"
-
-  - name: Install apache2 package
-    yum:
-      name: httpd
-      state: latest
-    when: ansible_distribution == "Amazon"
-
-  - name: Start and enable apache
+  - name: Start and enable apache and firewall
     service: 
         name: httpd
         state: started
         enabled: yes
     when: ansible_distribution == "Amazon"
 
-  - name: start fire wall
-    service:
+  - name: start and enable firewall
+    service: 
         name: firewalld
         state: started
         enabled: yes
@@ -64,17 +37,6 @@
         name: firewalld
     when: ansible_distribution == "Amazon"
 
-  - name: add php support for apache
-    yum:
-      name: php
-      state: latest
-    when: ansible_distribution == "Amazon"
-
-  - name: install docker
-    yum:
-      name: docker
-      state: latest
-    when: ansible_distribution == "Amazon"
 
 
 
