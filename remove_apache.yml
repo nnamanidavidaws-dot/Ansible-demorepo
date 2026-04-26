@@ -7,26 +7,61 @@
   - name: update repository index
     apt:
       update_cache: yes
+    when: ansible_distribution == "Ubuntu"
 
   - name: Remove apache2 package with purge
     apt:
       name: apache2
       state: absent
       purge: yes
+    when: ansible_distribution == "Ubuntu"
 
   - name: Remove php support for apache
     apt:
       name: libapache2-mod-php
       state: absent
       purge: yes
+    when: ansible_distribution == "Ubuntu"
 
   - name: Remove Docker
     apt:
       name: docker.io
       state: absent
       purge: yes
+    when: ansible_distribution == "Ubuntu"
 
   - name: Remove leftover dependency packages
     apt:
       autoremove: yes
       purge: yes
+    when: ansible_distribution == "Ubuntu"
+
+
+
+  - name: update repository index
+    yum:
+      update_cache: yes
+    when: ansible_distribution == "Amazon"
+
+  - name: Remove apache2 package with purge
+    yum:
+      name: httpd
+      state: absent
+    when: ansible_distribution == "Amazon"
+
+  - name: Remove php support for apache
+    yum:
+      name: php
+      state: absent
+    when: ansible_distribution == "Amazon"
+
+  - name: Remove Docker
+    yum:
+      name: docker
+      state: absent
+    when: ansible_distribution == "Amazon"
+
+  - name: Remove leftover dependency packages
+    yum:
+      autoremove: yes
+    when: ansible_distribution == "Amazon"
