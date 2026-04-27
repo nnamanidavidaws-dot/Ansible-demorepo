@@ -61,7 +61,14 @@
         name: firewalld
     when: ansible_distribution == "Amazon"
 
-
+  - name: copy coolsite html file for site
+    tags: apache,apache2,httpd
+    copy:
+      src: coolsite.html
+      dest: /var/www/html/coolsiteindex.html
+      owner: root
+      group: root
+      mode: '0644'
 
 - hosts: db_servers
   become: true
