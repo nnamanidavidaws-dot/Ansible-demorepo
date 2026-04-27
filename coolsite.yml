@@ -1,0 +1,85 @@
+---
+
+- hosts: all
+  become: true
+  pre_tasks:
+
+  - name: install updates (Amazon)
+    tags: always
+    yum:
+      update_only: yes
+      update_cache: yes
+    when: ansible_distribution == "Amazon"
+
+  - name: install updates (Ubuntu)
+    tags: always
+    apt:
+      upgrade: dist
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+
+
+- hosts: web_servers
+  become: true
+  tasks:
+
+
+  - name: Install packages
+    tags: apache,apache2,amazon,ubuntu,httpd
+    package:
+      name: 
+         - "{{ apache_package }}"
+         - "{{ php_package }}"
+         - "{{ docker_package }}"
+      state: latest
+
+  - name: Start and enable apache and firewall
+    tags: amazon,httpd,apache
+    service: 
+        name: httpd
+        state: started
+        enabled: yes
+    when: ansible_distribution == "Amazon"
+
+  - name: start and enable firewall
+    tags: amazon,httpd,apache
+    service: 
+        name: firewalld
+        state: started
+        enabled: yes
+    when: ansible_distribution == "Amazon"
+
+  - name: open port 80
+    tags: amazon,httpd,apache
+    command: firewall-cmd --add-port=80/tcp
+    when: ansible_distribution == "Amazon"
+
+  - name: Reload firewall 
+    tags: amazon,httpd,apache
+    service:
+        name: firewalld
+    when: ansible_distribution == "Amazon"
+
+
+
+- hosts: db_servers
+  become: true
+  tasks:
+
+  - name: install mariadb package
+    tags: db,mariadb,ubuntu,amazon
+    package:
+       name: "{{ mariadb_package }}"
+       state: latest
+
+
+- hosts: file_servers
+  become: true
+  tasks: 
+
+  - name: install samba package
+    tags: samba,file
+    package:
+       name: samba
+       state: latest

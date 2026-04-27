@@ -10,3 +10,8 @@
     register: result
     ignore_errors: yes
 
+
+  - name: check mariadb
+    command: mysql --version
+    register: result
+    ignore_errors: yes
