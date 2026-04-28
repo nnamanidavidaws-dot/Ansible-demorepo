@@ -1,0 +1,49 @@
+---
+
+- hosts: all
+  become: true
+  pre_tasks:
+
+
+  - name: install updates (Amazon)
+    tags: always
+    yum:
+      update_only: yes
+      update_cache: yes
+    when: ansible_distribution == "Amazon"
+
+  - name: install updates (Ubuntu)
+    tags: always
+    apt:
+      upgrade: dist
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+
+- hosts: all
+  become: true
+  tasks:
+
+
+  - name: create new users
+    tags: always
+    user:
+      name: david
+      groups: root
+
+  - name: add ssh key for david
+    tags: always
+    authorized_key:
+        user: david
+        key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7jbMMDjc8imeQ1TKSyvHKy8c0BUXtV9LPY+8EMNccZJ2PwC6hZkQkoYUvCNwzPtlCj+h+8VjSIiQcJpBMgho/8WiG/TVGSlNeVo4C3atTaWvn/cygxJr6TYaWO2HMwiFTraL3ywIaxKxb2o0vvCZ01uZRFFWTk5Lrpae4vsmR9JETLIxHurycOvApvdVoiM8E4ch1DHuy2nLmBMI2za1ajJ/CevnE1Bd4z/rrw4swMtZA6gWO3horxm5f0pZBbAaW74sXt2k2dhT2N5q1Ga+YmhyxKsGEenZxW5STc9JYi4wxE/iV/oQ0uLQ51q4WFVN9laTxLBGWQX84MsfhUknh"
+
+
+  - name: add sudoers file for david
+    tags: always
+    copy:
+       src: sudoer_david
+       dest: /etc/sudoers.d/david
+       owner: root
+       group: root
+       mode: 0440
+
